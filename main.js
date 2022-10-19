@@ -1,4 +1,10 @@
-function preload() {}
+noseX = 0;
+noseY = 0;
+
+function preload() 
+{
+    img1 = loadImage("https://i.postimg.cc/PxFvYgkv/l1.png");
+}
 
 function setup()
 {
@@ -8,8 +14,8 @@ function setup()
     video.size(300 , 300);
     video.hide();
 
-    poseNET = ml5.poseNet("pose" , modelLoaded);
-    poseNET.on("pose" , gotPose);
+    poseNET = ml5.poseNet(video , modelLoaded);
+    poseNET.on("pose" , gotposes);
 }
 
 function modelLoaded()
@@ -17,16 +23,22 @@ function modelLoaded()
     console.log("PoseNet is initialized");
 }
 
-function gotPose(results)
+function gotposes(results)
 {
+    if(results.length > 0)
+    {
     console.log(results);
-    console.log("nose x = " + results[0].pose.nose.x);
-    console.log("nose y = " + results[0].pose.nose.y);
+    noseX = results[0].pose.nose.x;
+    noseY = results[0].pose.nose.y;
+    console.log("nose x = " + noseX);
+    console.log("nose y = " + noseY);
+    }
 }
 
 function draw() 
 {
     image(video , 0 , 0 , 300 , 300);
+    image(img1 , noseX - 20 , noseY + 18 , 50 , 40);
 }
 
 function take_snapshot()
